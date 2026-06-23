@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <title>Gerenciador - Cadastro</title>
+</head>
+<body >
+    <h1>Criar Nova Conta</h1>
+    <form method="POST">
+        {{ form.csrf_token() }}
+        <p>{{ form.username.label }}
+{{ form.username(size=30) }}</p>
+        <p>{{ form.email.label }}
+{{ form.email(size=30) }}</p>
+        <p>{{ form.cargo.label }}
+{{ form.cargo() }}</p>
+        <p>{{ form.senha.label }}
+{{ form.senha(size=30) }}</p>
+        <p>{{ form.confirmeSenha.label }}
+{{ form.confirmeSenha(size=30) }}</p>
+        <p>{{ form.botao_confirmacao() }}</p>
+    </form>
+    <hr>
+    <p>Já tem conta? <a href="{{ url_for('homepage') }}">Voltar para o Login</a></p>
+</body>
+</html>

@@ -1,15 +1,21 @@
 <!DOCTYPE html>
-<html>
+<html lang="pt-br">
 <head>
-    <title>Homepage</title>
+    <meta charset="UTF-8">
+    <title>Gerenciador - Login</title>
 </head>
-<body>
-
-<h1>Hello World!</h1>
-
-<a href="{{ url_for('perfil', usuario='Gabriel') }}">
-    Perfil
-</a>
-
+<body >
+    <h1>Gerenciador de Tarefas</h1>
+    <h2>Login</h2>
+    <form method="POST">
+        {{ form.csrf_token() }}
+        <p>{{ form.email.label }}
+{{ form.email(size=30) }}</p>
+        <p>{{ form.senha.label }}
+{{ form.senha(size=30) }}</p>
+        <p>{{ form.botao_confirmacao() }}</p>
+    </form>
+    <hr>
+    <p>Não tem conta? <a href="{{ url_for('criarconta') }}">Cadastre-se aqui</a></p>
 </body>
 </html>

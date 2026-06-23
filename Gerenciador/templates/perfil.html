@@ -1,12 +1,29 @@
 <!DOCTYPE html>
-<html>
+<html lang="pt-br">
 <head>
-    <title>Perfil</title>
+    <meta charset="UTF-8">
+    <title>Painel - {{ usuario.nome }}</title>
 </head>
 <body>
+    <h1>Painel de {{ usuario.nome }}</h1>
 
-<h1>Perfil de {{ usuario }}</h1>
+    <p><strong>Cargo Atual:</strong> {{ usuario.cargo | capitalize }}</p>
+    <hr>
 
+    {% if e_o_dono %}
+        <h3>Minhas Tarefas do Sistema:</h3>
+        <ul>
+            <li>Nenhuma tarefa vinculada a você no momento.</li>
+        </ul>
+        <hr>
+        <p><a href="{{ url_for('logout') }}">Sair da Conta</a></p>
+    {% else %}
+        <h3>Tarefas Públicas de {{ usuario.nome }}:</h3>
+        <ul>
+            <li>Este usuário não possui tarefas públicas.</li>
+        </ul>
+        <hr>
+        <p><a href="{{ url_for('homepage') }}">Voltar para a Página Inicial</a></p>
+    {% endif %}
 </body>
 </html>
-
