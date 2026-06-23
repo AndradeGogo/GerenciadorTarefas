@@ -2,28 +2,120 @@
 <html lang="pt-br">
 <head>
     <meta charset="UTF-8">
-    <title>Painel - {{ usuario.nome }}</title>
+    <title>Meu Gerenciador de Tarefas</title>
 </head>
 <body>
-    <h1>Painel de {{ usuario.nome }}</h1>
 
-    <p><strong>Cargo Atual:</strong> {{ usuario.cargo | capitalize }}</p>
+    <div>
+        {% if form %}
+            <h2>Painel de Controle: {{ usuario.nome }}</h2>
+            <p><strong>Função:</strong> {{ usuario.cargo }} (Logado)</p>
+        {% else %}
+            <h2>Tarefas de: {{ usuario.nome }}</h2>
+            <p><strong>Cargo:</strong> {{ usuario.cargo }}</p>
+        {% endif %}
+    </div>
+
     <hr>
 
-    {% if e_o_dono %}
-        <h3>Minhas Tarefas do Sistema:</h3>
-        <ul>
-            <li>Nenhuma tarefa vinculada a você no momento.</li>
-        </ul>
-        <hr>
-        <p><a href="{{ url_for('logout') }}">Sair da Conta</a></p>
-    {% else %}
-        <h3>Tarefas Públicas de {{ usuario.nome }}:</h3>
-        <ul>
-            <li>Este usuário não possui tarefas públicas.</li>
-        </ul>
-        <hr>
-        <p><a href="{{ url_for('homepage') }}">Voltar para a Página Inicial</a></p>
-    {% endif %}
+    <div>
+        {% if form %}
+            <button type="button" id="btn-abrir-tarefa">+ Criar Nova Tarefa</button>
+
+            <div id="container-formulario" style="display: none;">
+                <h3>Formulário de Tarefa</h3>
+
+                <form method="POST" action="">
+                    {{ form.csrf_token }}
+
+                    <p>
+                        {{ form.titulo.label }}
+
+                        {{ form.titulo(placeholder="Digite o título da tarefa") }}
+                    </p>
+
+                    <p>
+                        {{ form.descricao.label }}
+
+                        {{ form.descricao(placeholder="Escreva os detalhes aqui...") }}
+                    </p>
+
+                    <p>
+                        {{ form.id_responsavel.label }}
+
+                        {{ form.id_responsavel() }}
+                    </p>
+
+                    <p>
+                        {{ form.prazo.label }}
+
+                        {{ form.prazo(type="date") }}
+                    </p>
+
+                    <p>
+                        {{ form.demanda.label }}
+
+                        {{ form.demanda() }}
+                    </p>
+
+                    <p>
+                        {{ form.botao_confirmacao() }}
+                        <button type="button" id="btn-cancelar-tarefa">Cancelar</button>
+                    </p>
+                </form>
+            </div>
+
+            <script>
+                const btnAbrir = document.getElementById('btn-abrir-tarefa');
+                const btnCancelar = document.getElementById('btn-cancelar-tarefa');
+                const containerForm = document.getElementById('container-formulario');
+
+                btnAbrir.addEventListener('click', function() {
+                    containerForm.style.display = 'block';
+                    btnAbrir.style.display = 'none';
+                });
+
+                btnCancelar.addEventListener('click', function() {
+                    containerForm.style.display = 'none';
+                    btnAbrir.style.display = 'block';
+                });
+            </script>
+
+
+        {% endif %}
+    </div>
+
+    {% with messages = get_flashed_messages() %}
+        {% if messages %}
+            {% for message in messages %}
+                <p><strong>* {{ message }} *</strong></p>
+            {% endfor %}
+        {% endif %}
+    {% endwith %}
+
+    <hr>
+
+    <div>
+        <h3>Quadro de Tarefas</h3>
+
+        {% for tarefa in tarefas %}
+            <div>
+                <h4>{{ tarefa.titulo }} — <em>Status: {{ tarefa.status }}</em></h4>
+                <p>{{ tarefa.descricao }}</p>
+                <p>
+                    <small>Prazo: {{ tarefa.prazo.strftime('%d/%m/%Y') if tarefa.prazo else 'Sem prazo' }}</small> |
+                    <small>Prioridade: {{ tarefa.demanda }}</small>
+                </p>
+                <hr>
+            </div>
+        {% else %}
+            <p>Nenhuma tarefa atribuída para este perfil no momento.</p>
+        {% endfor %}
+    </div>
+
+    <p>
+        <a href="{{ url_for('logout') }}">Sair do Sistema</a>
+    </p>
+
 </body>
 </html>

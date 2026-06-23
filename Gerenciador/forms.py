@@ -1,5 +1,4 @@
 from flask_wtf import FlaskForm
-from flask_wtf.file import FileField, FileAllowed # Importados para lidar com arquivos de imagem
 from wtforms import StringField, PasswordField, SubmitField, SelectField, TextAreaField, DateField
 from wtforms.validators import DataRequired, Email, Length, EqualTo, ValidationError
 from Gerenciador.models import Usuario
@@ -37,10 +36,3 @@ class FormTarefa(FlaskForm):
     prazo = DateField('Prazo de Conclusão', validators=[DataRequired()])
     id_responsavel = SelectField('Responsável pela Tarefa', coerce=int, validators=[DataRequired()])
     botao_confirmacao = SubmitField('Criar Tarefa')
-
-
-# Formulário adicionado para a funcionalidade de enviar a foto de perfil
-class FormFotoPerfil(FlaskForm):
-    # Aceita apenas extensões seguras de imagem
-    foto = FileField('Atualizar Foto de Perfil', validators=[FileAllowed(['jpg', 'png', 'jpeg'])])
-    botao_confirmacao = SubmitField('Enviar Foto')
